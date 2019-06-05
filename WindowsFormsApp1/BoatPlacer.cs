@@ -13,7 +13,7 @@ namespace WindowsFormsApp1
 
         public BoatPlacer(int length)
         {
-            Length = length;
+            SetLength(length);
         }
 
         public int GetLength()
@@ -23,7 +23,7 @@ namespace WindowsFormsApp1
 
         public bool Place(GameField field, int x, int y)
         {
-            if (Length > 0 && x + Length <= 10 && y + Length <= 10)
+            if ((x + Length <= 10 && !Direction ) || (y + Length <= 10 && Direction))
             {
                 for (int i = 0; i < Length; i++)
                 {
@@ -74,7 +74,9 @@ namespace WindowsFormsApp1
 
         public void SetLength(int length)
         {
-            Length = length;
+            if (length >= 0 && length <= 4)
+                Length = length;
+            else Length = 0;
         }
 
         public void Rotate()
