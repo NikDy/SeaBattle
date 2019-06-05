@@ -106,8 +106,14 @@ namespace WindowsFormsApp1
         private void NextTurn()
         {
             Turn = !Turn;
-            if (Turn) SetLabel("Your turn");
-            else SetLabel("Enemy turn");
+            if (Turn)
+            {
+                SetLabel("Your turn");
+            }
+            else
+            {
+                SetLabel("Enemy turn");
+            }
         }
 
 
@@ -136,6 +142,9 @@ namespace WindowsFormsApp1
             }
             NextTurn();
         }
+
+
+        
 
 
         private void Form1_Load(object sender, EventArgs e)

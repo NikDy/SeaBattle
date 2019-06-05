@@ -75,24 +75,26 @@ namespace WindowsFormsApp1
         }
 
 
-        private void SetFieldActive()
+        public void SetFieldActive()
         {
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
                     checkBoxes[i * 10 + j].Click += GameField_PlayCheck;
+                    checkBoxes[i * 10 + j].Click -= GameField_SafeCheck;
                 }
             }
         }
 
 
-        private void SetFieldUnactive()
+        public void SetFieldUnactive()
         {
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
+                    checkBoxes[i * 10 + j].Click += GameField_SafeCheck;
                     checkBoxes[i * 10 + j].Click -= GameField_PlayCheck;
                 }
             }
@@ -113,6 +115,7 @@ namespace WindowsFormsApp1
             else return false;
         }
 
+
         public int Strike(int x, int y)
         {
             if (Field[x, y] == 1)
@@ -130,10 +133,14 @@ namespace WindowsFormsApp1
         }
 
 
+        
+
+
         public int TileState(int x, int y)
         {
             return Field[x, y];
         }
+
 
         private void GameField_PlayCheck(object sender, EventArgs e)
         {
@@ -146,6 +153,14 @@ namespace WindowsFormsApp1
         }
 
 
+        private void GameField_SafeCheck(object sender, EventArgs e)
+        {
+            System.Windows.Forms.CheckBox box = (System.Windows.Forms.CheckBox)sender;
+            box.Checked = !box.Checked;
+            sender = box;
+        }
+
+
         private void GameField_CheckedChanged(object sender, EventArgs e)
         {
             System.Windows.Forms.CheckBox box = (System.Windows.Forms.CheckBox)sender;
@@ -155,8 +170,6 @@ namespace WindowsFormsApp1
                 parentForm.BoatPlacerControl(boatPlacer.GetLength());
                 boatPlacer.SetLength(0);
             }
-            //parentForm.GetBoatPlacer().Place(this, (int)(Num / 10), Num % 10);
-            //parentForm.GetBoatPlacer().SetLength(0);
             UpdateCheckBoxes();
         }
     }
