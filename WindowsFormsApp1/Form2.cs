@@ -30,7 +30,6 @@ namespace WindowsFormsApp1
             textBox1.Enabled = false;
             if (parentForm.networker.WaitForConnect() == 1)
             {
-                parentForm.Enabled = true;
                 this.Close();
             }
         }
@@ -38,13 +37,12 @@ namespace WindowsFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             if (textBox1.Text != "") parentForm.networker.Connect(textBox1.Text);
-            parentForm.Enabled = true;
             this.Close();
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
-            parentForm.Close();
+            parentForm.Enabled = true;
         }
     }
 }

@@ -16,13 +16,13 @@ namespace WindowsFormsApp1
         private TcpListener Listener = null;
         private TcpClient client = null;
         private NetworkStream stream = null;
-        private Form1 form;
+        private Form1 parentForm;
         Thread receiveThread = null;
         private int id = 0;
 
         public Network(Form1 form1)
         {
-            form = form1;
+            parentForm = form1;
             id = Environment.TickCount % 100000;
         }
 
@@ -46,12 +46,13 @@ namespace WindowsFormsApp1
             try
             {
                 receiveThread.Abort();
+                receiveThread.Join(0);
             }
             catch { };
         }
 
 
-        public void ReceiveMessageT()
+        private void ReceiveMessageT()
         {
             while (true)
             {
@@ -79,29 +80,19 @@ namespace WindowsFormsApp1
                         message = message.Remove(message.IndexOf('_'));
                     }
 
-                    if (message == "Start")
-                    {
-                        form.EnemyIsReady = true;
-                    }
+                    if (message == "Start")                         parentForm.EnemyIsReady = true;
+                    
                     int.TryParse(message, out int res);
-                    if (res > 0 && res < 100 && form.Turn)
-                    {
-                        form.StrikeEnemy(res - 1);
-                    }
-                    if (res > 0 && res < 100 && !form.Turn)
-                    {
-                        form.StrikePlayer(res - 1);
-                    }
-                    if (res < 0 && form.Turn)
-                    {
-                        form.ConfirmEnemyStrike(res);
-                    }
+                    if (res > 0 && res < 101 && parentForm.Turn)    parentForm.StrikeEnemy(res - 1);
+                    if (res > 0 && res < 101 && !parentForm.Turn)   parentForm.StrikePlayer(res - 1);
+                    if (res < 0 && parentForm.Turn)                 parentForm.ConfirmEnemyStrike(res);
                 }
                 catch
                 {
                 }
             }
         }
+
 
         public void TransmitMessage(string message)
         {

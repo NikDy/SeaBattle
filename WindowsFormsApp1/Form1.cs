@@ -77,7 +77,7 @@ namespace WindowsFormsApp1
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (b4 + b3 + b2 + b1 == 0)
+            if (b4 + b3 + b2 + b1 <= 0)
             {
                 this.button5.Enabled = false;
                 networker.TransmitMessage("Start");
