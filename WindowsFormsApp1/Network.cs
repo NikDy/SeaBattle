@@ -45,8 +45,8 @@ namespace WindowsFormsApp1
         {
             try
             {
+                receiveThread.Interrupt();
                 receiveThread.Abort();
-                receiveThread.Join(0);
             }
             catch { };
         }

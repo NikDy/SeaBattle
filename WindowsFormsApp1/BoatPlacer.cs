@@ -36,6 +36,7 @@ namespace WindowsFormsApp1
             else return false;
         }
 
+
         private void LockBoatSides(GameField field)
         {
             for(int i = 0; i < 10; i++)

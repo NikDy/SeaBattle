@@ -42,6 +42,7 @@ namespace WindowsFormsApp1
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
+            parentForm.SetLabel("Place your ships");
             parentForm.Enabled = true;
         }
     }

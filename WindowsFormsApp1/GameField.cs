@@ -11,13 +11,17 @@ namespace WindowsFormsApp1
     public class GameField
     {
         public int[,] Field = new int [10,10];
-        private Form1 form1 = null;
+        private Form1 parentForm = null;
+        public BoatPlacer boatPlacer = null;
         List<System.Windows.Forms.CheckBox> checkBoxes = new List<System.Windows.Forms.CheckBox>(100);
+
 
         //0 - water; 1- boat; 2 - locked; 3 - destroyed boat
         public GameField(int x, int y, Form1 form)
         {
-            form1 = form;
+            parentForm = form;
+            boatPlacer = new BoatPlacer(0);
+
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
@@ -36,7 +40,7 @@ namespace WindowsFormsApp1
                     checkBoxes[i * 10 + j].AutoSize = true;
                     checkBoxes[i * 10 + j].Location = new Point(x + i * 20, y + j * 20);
                     checkBoxes[i * 10 + j].Click += GameField_CheckedChanged;
-                    form1.Controls.Add(checkBoxes[i * 10 + j]);
+                    parentForm.Controls.Add(checkBoxes[i * 10 + j]);
                 }
             }
 
@@ -133,11 +137,11 @@ namespace WindowsFormsApp1
 
         private void GameField_PlayCheck(object sender, EventArgs e)
         {
-            if (form1.Turn)
+            if (parentForm.Turn)
             {
                 System.Windows.Forms.CheckBox box = (System.Windows.Forms.CheckBox)sender;
                 int.TryParse(box.Name, out int Num);
-                form1.StrikeEnemy(Num);
+                parentForm.StrikeEnemy(Num);
             }
         }
 
@@ -146,8 +150,13 @@ namespace WindowsFormsApp1
         {
             System.Windows.Forms.CheckBox box = (System.Windows.Forms.CheckBox)sender;
             int.TryParse(box.Name, out int Num);
-            form1.GetBoatPlacer().Place(this, (int)(Num / 10), Num % 10);
-            form1.GetBoatPlacer().SetLength(0);
+            if (boatPlacer.Place(this, (int)(Num / 10), Num % 10))
+            {
+                parentForm.BoatPlacerControl(boatPlacer.GetLength());
+                boatPlacer.SetLength(0);
+            }
+            //parentForm.GetBoatPlacer().Place(this, (int)(Num / 10), Num % 10);
+            //parentForm.GetBoatPlacer().SetLength(0);
             UpdateCheckBoxes();
         }
     }

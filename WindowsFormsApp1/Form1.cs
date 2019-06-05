@@ -7,24 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Reflection;
 using System.Threading;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private BoatPlacer Placer = new BoatPlacer(0);
         GameField PlayerField = null; 
         GameField EnemyField = null;
         public Network networker = null;
         public bool EnemyIsReady = false;
         public bool Turn = false;
 
-        private int b4 = 2;
-        private int b3 = 3;  //fastfix for buttons locker
-        private int b2 = 5;  //need to rewrite
-        private int b1 = 7; 
+        private int b4 = 1;
+        private int b3 = 2;  //fastfix for buttons locker
+        private int b2 = 3;  //need to rewrite
+        private int b1 = 4; 
                             
 
         public Form1()
@@ -37,40 +35,41 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Placer.SetLength(4);
+            PlayerField.boatPlacer.SetLength(4);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Placer.SetLength(3);
+            PlayerField.boatPlacer.SetLength(3);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Placer.SetLength(2);
+            PlayerField.boatPlacer.SetLength(2);
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Placer.SetLength(1);
+            PlayerField.boatPlacer.SetLength(1);
         }
 
-        public BoatPlacer GetBoatPlacer()
+
+        public void BoatPlacerControl(int length)
         {
-            if (Placer.GetLength() == 4) b4--;
-            if (Placer.GetLength() == 3) b3--;
-            if (Placer.GetLength() == 2) b2--;
-            if (Placer.GetLength() == 1) b1--;
+            if (length == 4) b4--;
+            if (length == 3) b3--;
+            if (length == 2) b2--;
+            if (length == 1) b1--;
             if (b4 == 0) this.button1.Enabled = false;
             if (b3 == 0) this.button2.Enabled = false;
             if (b2 == 0) this.button3.Enabled = false;
             if (b1 == 0) this.button4.Enabled = false;
-            return Placer;
         }
+
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Placer.Rotate();
+            PlayerField.boatPlacer.Rotate();
             if (button6.Text == "horizontal") button6.Text = "vertical";
             else button6.Text = "horizontal";
         }
@@ -82,10 +81,10 @@ namespace WindowsFormsApp1
                 this.button5.Enabled = false;
                 networker.TransmitMessage("Start");
                 if (!EnemyIsReady) Turn = true;
-                label1.Text = "Wait for opponent";
+                SetLabel("Wait for opponent");
                 while (!EnemyIsReady);
-                if (Turn) label1.Text = "Your turn";
-                else label1.Text = "Enemy turn";
+                if (Turn) SetLabel("Your turn");
+                else SetLabel("Enemy turn");
                 PlayerField.SetFieldReady(false);
                 EnemyField.SetFieldReady(true);
             }
@@ -107,8 +106,8 @@ namespace WindowsFormsApp1
         private void NextTurn()
         {
             Turn = !Turn;
-            if (Turn) label1.Text = "Your turn";
-            else label1.Text = "Enemy turn";
+            if (Turn) SetLabel("Your turn");
+            else SetLabel("Enemy turn");
         }
 
 
@@ -119,10 +118,11 @@ namespace WindowsFormsApp1
             if (EnemyField.IsGameEnd())
             {
                 Enabled = false;
-                label1.Text = "You win!";
+                SetLabel("You win!");
             }
             NextTurn();
         }
+
 
         public void StrikePlayer(int pos)
         {
@@ -132,17 +132,25 @@ namespace WindowsFormsApp1
             if (PlayerField.IsGameEnd())
             {
                 Enabled = false;
-                label1.Text = "You lose";
+                SetLabel("You lose");
             }
             NextTurn();
         }
 
+
         private void Form1_Load(object sender, EventArgs e)
         {
             Form2 form2 = new Form2(this);
-            this.label1.Text = "Wait for connect";
+            SetLabel("Wait for connect");
             this.Enabled = false;
             form2.Show();
+        }
+
+
+        public void SetLabel(string text)
+        {
+            label1.Text = text;
+            label1.Refresh();
         }
 
 
