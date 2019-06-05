@@ -27,6 +27,11 @@ namespace WindowsFormsApp1
             {
                 for (int i = 0; i < Length; i++)
                 {
+                    if ( Direction &&  (field.Field[x, y + i] == 1 || field.Field[x, y + i] == 2)) return false;
+                    if (!Direction && (field.Field[x + i, y] == 1 || field.Field[x + i, y] == 2))  return false;
+                }
+                for (int i = 0; i < Length; i++)
+                {
                     if (Direction) field.Field[x, y + i] = 1;
                     else field.Field[x + i, y] = 1;
                 }
