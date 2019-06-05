@@ -41,5 +41,10 @@ namespace WindowsFormsApp1
             parentForm.Enabled = true;
             this.Close();
         }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            parentForm.Close();
+        }
     }
 }

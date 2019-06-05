@@ -43,7 +43,11 @@ namespace WindowsFormsApp1
 
         public void StopReciveThread()
         {
-            receiveThread.Abort();
+            try
+            {
+                receiveThread.Abort();
+            }
+            catch { };
         }
 
 

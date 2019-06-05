@@ -145,7 +145,8 @@ namespace WindowsFormsApp1
             form2.Show();
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             networker.StopReciveThread();
         }
